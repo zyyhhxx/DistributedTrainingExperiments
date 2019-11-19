@@ -42,14 +42,6 @@ eval_dataset = mnist_test.map(scale).batch(BATCH_SIZE)
 
 # Define the model
 with strategy.scope():
-    model = tf.keras.Sequential([
-        tf.keras.layers.Conv2D(32, 3, activation='relu', input_shape=(28, 28, 1)),
-        tf.keras.layers.MaxPooling2D(),
-        tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(64, activation='relu'),
-        tf.keras.layers.Dense(10, activation='softmax')
-    ])
-
     model = tf.keras.applications.resnet.ResNet50(include_top=False, input_shape=(32, 32, 3), classes=10)
 
     model.compile(loss='sparse_categorical_crossentropy',
