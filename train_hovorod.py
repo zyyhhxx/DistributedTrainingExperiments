@@ -8,6 +8,7 @@ import timeit
 import tensorflow as tf
 import horovod.tensorflow as hvd
 from tensorflow.keras import applications
+import time
 
 # Benchmark settings
 parser = argparse.ArgumentParser(description='TensorFlow Synthetic Benchmark',
@@ -106,7 +107,7 @@ def run(benchmark_step):
     log('Total img/sec on %d %s(s): %.1f +-%.1f' %
         (hvd.size(), device, hvd.size() * img_sec_mean, hvd.size() * img_sec_conf))
 
-
+start_time = time.time()
 if tf.executing_eagerly():
     with tf.device(device):
         run(lambda: opt.minimize(loss_function, var_list=model.trainable_variables))
@@ -118,3 +119,4 @@ else:
         loss = loss_function()
         train_opt = opt.minimize(loss)
         run(lambda: session.run(train_opt))
+print("Total time: {0:.3f} seconds".format(time.time()-start_time))
