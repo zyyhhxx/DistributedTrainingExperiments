@@ -16,6 +16,8 @@ datasets, info = tfds.load(name='fashion_mnist', with_info=True, as_supervised=T
 
 mnist_train, mnist_test = datasets['train'], datasets['test']
 
+#strategy = tf.distribute.MirroredStrategy(cross_device_ops=tf.distribute.HierarchicalCopyAllReduce())
+#strategy = tf.distribute.MirroredStrategy(cross_device_ops=tf.distribute.ReductionToOneDevice())
 strategy = tf.distribute.MirroredStrategy()
 
 print('Number of devices: {}'.format(strategy.num_replicas_in_sync))
@@ -32,7 +34,6 @@ def scale(image, label):
 
     image = tf.cast(image, tf.float32)
     image /= 255
-    print(image.shape)
 
     return image, label
 
