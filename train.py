@@ -40,6 +40,18 @@ def scale(image, label):
 train_dataset = mnist_train.map(scale).cache().shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
 eval_dataset = mnist_test.map(scale).batch(BATCH_SIZE)
 
+class timecallback(tf.keras.callbacks.Callback):
+    def __init__(self):
+        self.times = []
+        # use this value as reference to calculate cummulative time taken
+        self.timetaken = time.clock()
+    def on_epoch_end(self,epoch,logs = {}):
+        self.times.append(time.clock() - self.timetaken)
+    def on_train_end(self,logs = {}):
+        total_time = sum(logs[1:])
+        print("Training time:{0:.3f} seconds, Throughput: {1:.3f}, Training cost: {2:.3f}"
+            .format(total_time, num_train_examples*4 / total_time, strategy.num_replicas_in_sync * total_time))
+
 # Define the model
 with strategy.scope():
     model = tf.keras.applications.resnet.ResNet50(include_top=False, input_shape=(32, 32, 3), classes=10)
@@ -48,9 +60,5 @@ with strategy.scope():
                   optimizer=tf.keras.optimizers.Adam(),
                   metrics=['accuracy'])
 
-epochs = 5
-start_time = time.time()
-model.fit(train_dataset, epochs=epochs)
-duration = time.time() - start_time
-print("Training time:{0:.2f} seconds, Throughput: {1:.2f}, Training cost: {2:.2f}"
-    .format(duration, num_train_examples*epochs / duration, strategy.num_replicas_in_sync * duration))
+timetaken = timecallback()
+model.fit(train_dataset, epochs=5, callbacks = [timetaken])
