@@ -44,10 +44,10 @@ class timecallback(tf.keras.callbacks.Callback):
     def __init__(self):
         self.times = []
         # use this value as reference to calculate cummulative time taken
-        self.timetaken = time.clock()
+        self.timetaken = time.time()
     def on_epoch_end(self,epoch,logs = {}):
-        self.times.append(time.clock() - self.timetaken)
-        self.timetaken = time.clock()
+        self.times.append(time.time() - self.timetaken)
+        self.timetaken = time.time()
     def on_train_end(self,logs = {}):
         total_time = sum(self.times[1:])
         print("Training time:{0:.3f} seconds, Throughput: {1:.3f}, Training cost: {2:.3f}"
