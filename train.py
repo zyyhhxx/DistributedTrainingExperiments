@@ -48,8 +48,9 @@ with strategy.scope():
                   optimizer=tf.keras.optimizers.Adam(),
                   metrics=['accuracy'])
 
+epochs = 5
 start_time = time.time()
-model.fit(train_dataset, epochs=1)
+model.fit(train_dataset, epochs=epochs)
 duration = time.time() - start_time
 print("Training time:{0:.2f} seconds, Throughput: {1:.2f}, Training cost: {2:.2f}"
-    .format(duration, num_train_examples / duration, strategy.num_replicas_in_sync * duration))
+    .format(duration, num_train_examples*epochs / duration, strategy.num_replicas_in_sync * duration))
