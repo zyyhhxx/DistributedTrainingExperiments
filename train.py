@@ -47,6 +47,7 @@ class timecallback(tf.keras.callbacks.Callback):
         self.timetaken = time.clock()
     def on_epoch_end(self,epoch,logs = {}):
         self.times.append(time.clock() - self.timetaken)
+        self.timetaken = time.clock()
     def on_train_end(self,logs = {}):
         total_time = sum(self.times[1:])
         print("Training time:{0:.3f} seconds, Throughput: {1:.3f}, Training cost: {2:.3f}"
