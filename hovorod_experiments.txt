@@ -1,0 +1,4 @@
+gpus:1,2,4,8
+TP:46.5,90.9,175.2,337.7
+TT:196.649,201.927,211.752,237.383
+mpirun -np 4 python3 train_hovorod.py --num-iters 25
