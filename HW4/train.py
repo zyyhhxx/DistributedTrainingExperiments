@@ -10,6 +10,7 @@ import time
 
 # Important configuration
 EFFECTIVE_BATCH_SIZE = 64
+EPOCH = 2
 
 # Prepare the data
 datasets, info = tfds.load(name='cifar10', with_info=True, as_supervised=True)
@@ -47,7 +48,7 @@ class timecallback(tf.keras.callbacks.Callback):
     def on_train_end(self,logs = {}):
         total_time = sum(self.times[1:])
         print("Training time:{0:.3f} seconds, Throughput: {1:.3f}, Training cost: {2:.3f}"
-            .format(total_time, num_train_examples*4 / total_time, strategy.num_replicas_in_sync * total_time * 0.9 / 360))
+            .format(total_time, num_train_examples*(EPOCH-1) / total_time, strategy.num_replicas_in_sync * total_time * 0.9 / 360))
 
 # Define the model
 with strategy.scope():
@@ -58,4 +59,4 @@ with strategy.scope():
                   metrics=['accuracy'])
 
 timetaken = timecallback()
-model.fit(train_dataset, epochs=2, callbacks = [timetaken])
+model.fit(train_dataset, epochs=EPOCH, callbacks = [timetaken])
