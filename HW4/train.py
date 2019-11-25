@@ -53,7 +53,7 @@ class timecallback(tf.keras.callbacks.Callback):
 
 # Define the model
 with strategy.scope():
-    model = tf.keras.applications.resnet.ResNet50(include_top=False, input_shape=(32, 32, 3), classes=10)
+    model = tf.keras.applications.resnet.ResNet50(include_top=False, input_shape=(36, 36, 5), classes=10)
 
     model.compile(loss='sparse_categorical_crossentropy',
                   optimizer=tf.keras.optimizers.Adam(),
