@@ -58,4 +58,4 @@ with strategy.scope():
                   metrics=['accuracy'])
 
 timetaken = timecallback()
-model.fit(train_dataset, epochs=5, callbacks = [timetaken])
+model.fit(train_dataset, epochs=2, callbacks = [timetaken])
