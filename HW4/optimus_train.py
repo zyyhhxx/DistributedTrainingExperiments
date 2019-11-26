@@ -1,6 +1,6 @@
 from __future__ import print_function
 import warnings
-import tensorflow.keras
+import tensorflow.keras as keras
 from tensorflow.keras.layers import Dense, Conv2D, BatchNormalization, Activation
 from tensorflow.keras.layers import AveragePooling2D, Input, Flatten
 from tensorflow.keras.optimizers import Adam
@@ -172,7 +172,7 @@ class StopAtGoal(keras.callbacks.Callback):
         return monitor_value
 
 from time import time
-for n in [20, 26, 32, 44, 56]:
+for n in [20, 26, 32, 44, 56, 50]:
   model = get_model(n)
   model.compile(loss='categorical_crossentropy',
               optimizer=Adam(lr_schedule(0)),
@@ -183,9 +183,11 @@ for n in [20, 26, 32, 44, 56]:
                                 cooldown=0,
                                 patience=5,
                                 min_lr=0.5e-6)
-  es = StopAtGoal(goal=0.92)
-  callbacks = [es, lr_reducer, lr_scheduler]
-  callbacks = [lr_reducer, lr_scheduler]
+  if n == 50:
+    es = StopAtGoal(goal=0.92)
+    callbacks = [es, lr_reducer, lr_scheduler]
+  else:
+    callbacks = [lr_reducer, lr_scheduler]
   start = time()
   history = model.fit(x_train, y_train,
               batch_size=batch_size,
