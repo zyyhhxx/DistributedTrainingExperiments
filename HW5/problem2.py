@@ -152,3 +152,5 @@ model_ft, history = train_model(model_ft, criterion, optimizer_ft, drop_lr_sched
 
 with open('data.json', 'w') as fp:
     json.dump(history, fp)
+
+torch.save(model_ft.state_dict(), "model.pt")
