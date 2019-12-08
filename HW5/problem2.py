@@ -2,8 +2,6 @@ from __future__ import print_function, division
 
 import copy
 import json
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
 import numpy as np
 import os
 from PIL import Image
